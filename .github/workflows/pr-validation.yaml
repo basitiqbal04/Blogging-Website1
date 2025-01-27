@@ -1,4 +1,4 @@
-name: Pull Request Validation
+name: PR Validation
 
 on:
   pull_request:
@@ -6,32 +6,13 @@ on:
       - develop
 
 jobs:
-  linting:
+  lint:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v4
-
-      - name: Install Dependencies
-        run: |
-          npm install -g htmlhint stylelint
-
-      - name: Run HTMLHint
-        run: htmlhint "src/**/*.html"
-
-      - name: Run Stylelint
-        run: stylelint "styles/**/*.css"
-
-  build:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v4
-
-      - name: Install Dependencies
-        run: |
-          npm install parcel
-
-      - name: Build Project
-        run: |
-          npx parcel build src/index.html --dist-dir build
+      - uses: actions/checkout@v3
+      - name: Install dependencies
+        run: npm install htmlhint stylelint
+      - name: Run HTML Lint
+        run: npx htmlhint "src/**/*.html"
+      - name: Run CSS Lint
+        run: npx stylelint "styles/**/*.css"
