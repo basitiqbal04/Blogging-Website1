@@ -1,0 +1,37 @@
+name: Pull Request Validation
+
+on:
+  pull_request:
+    branches:
+      - develop
+
+jobs:
+  linting:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Install Dependencies
+        run: |
+          npm install -g htmlhint stylelint
+
+      - name: Run HTMLHint
+        run: htmlhint "src/**/*.html"
+
+      - name: Run Stylelint
+        run: stylelint "styles/**/*.css"
+
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Install Dependencies
+        run: |
+          npm install parcel
+
+      - name: Build Project
+        run: |
+          npx parcel build src/index.html --dist-dir build
